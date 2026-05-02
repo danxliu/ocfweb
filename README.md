@@ -7,7 +7,24 @@ ocfweb
 [The main ocf website.](https://www.ocf.berkeley.edu/)
 
 
-## Working on `ocfweb`
+## Working on `ocfweb` on the ocfstaff remote dev server
+
+1. Run `devenv up`
+    - It may take about several minutes for all of the dependencies to install the first time. Give it at least 10 min.
+    - You will see a process-compose tui appear, with a process called "web" and the logs visible. Your user's port is what is generated in the log line `Running on https://koi.ocf.berkeley.edu:YOUROWNPORT`, based on your uid. This is to avoid conflicts with other users who might also be running dev servers on koi.
+2. Open an SSH tunnel on your local host (**not** on `koi` or other OCF servers): `ssh -L YOUROWNPORT:localhost:YOUROWNPORT koi`
+    - to avoid this extra step in the future, add the following to your `~/.ssh/config`:
+    ```
+    Host koi
+        HostName koi.ocf.berkeley.edu
+        LocalForward YOUROWNPORT localhost:YOUROWNPORT
+    ```
+3. Go to https://localhost:YOUROWNPORT in your local browser!
+
+
+## BELOW THIS IS OUTDATED. WIP
+
+---
 
 We recommend following all of these steps
 [on supernova](https://www.ocf.berkeley.edu/docs/staff/procedures/ssh-supernova/),
