@@ -51,10 +51,10 @@ class Post(
 
 @periodic(60)
 def get_blog_posts() -> List[Any]:
-    """Parse the beautiful OCF status blog atom feed into a list of Posts.
+    """Parse the OCF mkdocs blog RSS feed into a list of Posts.
 
-    Unfortunately Blogger is hella flakey so we use it inside a loop and fail
-    silently if it doesn't succeed.
+    RSS has been flakey so we use it inside a loop and fail silently if it
+    doesn't succeed.
     """
     for _ in range(5):
         try:
