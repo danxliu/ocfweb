@@ -6,12 +6,12 @@ from datetime import datetime
 from textwrap import dedent
 from unittest import mock
 
-import crypt
 import pytest
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from ocflib.vhost.mail import MailForwardingAddress
+from passlib.hash import sha512_crypt
 
 from ocfweb.account import vhost_mail
 from ocfweb.account.vhost_mail import _error
@@ -127,7 +127,7 @@ class VerifyPassword:
         if self.password is None:
             return other is None
         else:
-            return crypt.crypt(self.password, salt=other)
+            return sha512_crypt.verify(self.password, other)
 
 
 @pytest.mark.parametrize(

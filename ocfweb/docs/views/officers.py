@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Any
 from typing import Callable
-from typing import cast
 from typing import List
 from typing import Optional
 from typing import Tuple
@@ -69,10 +68,10 @@ class Officer:
 
         if isinstance(uid_or_info, tuple):
             if len(uid_or_info) == 3:
-                uid, start, end = cast(Tuple[str, date, date], uid_or_info)
+                uid, start, end = uid_or_info
                 acting = False
             else:
-                uid, start, end, acting = cast(Tuple[str, date, date, bool], uid_or_info)
+                uid, start, end, acting = uid_or_info
         else:
             uid = uid_or_info
             start = end = None
