@@ -25,15 +25,15 @@ class WebPrintForm(Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         printers = get_printers()
-        
+
         choices = []
         for name, info in printers.items():
             if info.get("printer-is-shared", True):
                 choices.append((name, info.get("printer-info", name)))
-        
+
         if not choices:
             choices = [("", "No printers available")]
-            
+
         self.fields["printer"].choices = choices
 
     def clean_file(self):
@@ -59,14 +59,14 @@ def web_print(request: HttpRequest) -> HttpResponse:
                         tmp.write(chunk)
                     tmp.flush()
 
-                    # Submit to CUPS
+                    # Submit to printhost CUPS
                     cups.setUser(user)
                     conn = cups.Connection(host="printhost")
                     conn.printFile(
                         printer,
                         tmp.name,
                         uploaded_file.name,
-                        {},  # Options can be added here
+                        {},
                     )
 
                     messages.success(
