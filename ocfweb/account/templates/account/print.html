@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-8 ocf-content-block">
+            <p>
+                Welcome to web printing! You can upload a file here to print it to one of the lab printers.
+            </p>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div style="max-width: 400px;">
+                    {{ form|bootstrap }}
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
+                    Print
+                </button>
+            </form>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Remaining Quota</h3>
+                </div>
+                <div class="panel-body">
+                    <dl>
+                        <dt>Daily</dt>
+                        <dd>{{ quota.daily }} pages</dd>
+                        <dt>Semesterly</dt>
+                        <dd>{{ quota.semesterly }} pages</dd>
+                    </dl>
+                    <p class="text-muted small">
+                        Quota is deducted automatically when you print.
+                        For more info, see the <a href="{% url 'doc' 'services/lab/printing' %}">printing docs</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

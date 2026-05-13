@@ -125,6 +125,8 @@ pycryptodome==3.23.0
     # via
     #   -r requirements-minimal.txt
     #   ocflib
+pycups==2.0.4
+    # via -r requirements-minimal.txt
 pygithub==2.7.0
     # via ocflib
 pygments==2.19.2

@@ -8,6 +8,7 @@ RUN apt-get update \
         cracklib-runtime \
         libcrack2 \
         libcrack2-dev \
+        libcups2-dev \
         libffi-dev \
         libfreetype6-dev \
         libpng-dev \

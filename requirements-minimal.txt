@@ -16,6 +16,7 @@ ocflib
 paramiko
 pyasn1
 pycryptodome
+pycups
 pygments
 pymysql
 python-dateutil

@@ -12,6 +12,7 @@
     uv.enable = true;
   };
   packages = with pkgs; [
+    cups
     gnumake
     libffi
     pkg-config
