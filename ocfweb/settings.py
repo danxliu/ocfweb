@@ -170,6 +170,8 @@ OCFSTATS_USER = conf.get('ocfstats', 'user')
 OCFSTATS_PASSWORD = conf.get('ocfstats', 'password')
 OCFSTATS_DB = conf.get('ocfstats', 'db')
 
+PRINTING_OTP_URL = conf.get('printing', 'otp_url', fallback='http://127.0.0.1:8000')
+
 if not DEBUG:
     # Prod-only settings.
     CACHES['default'] = {

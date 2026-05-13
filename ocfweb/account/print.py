@@ -1,7 +1,9 @@
 import tempfile
 
 import cups
+import requests
 from django import forms
+from django.conf import settings
 from django.contrib import messages
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
@@ -21,6 +23,12 @@ class WebPrintForm(Form):
     file = forms.FileField(
         label="File to Print",
     )
+    otp = forms.CharField(
+        label="Verification Code (From front of room)",
+        min_length=6,
+        max_length=6,
+        widget=forms.TextInput(attrs={'placeholder': '123456'})
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -38,6 +46,24 @@ class WebPrintForm(Form):
 
     def clean_file(self):
         return self.cleaned_data.get("file")
+
+    def clean_otp(self):
+        otp = self.cleaned_data.get('otp')
+        if not otp:
+            return otp
+
+        verify_url = f"{settings.PRINTING_OTP_URL}/verify/{otp}"
+        try:
+            response = requests.get(verify_url, timeout=5)
+            response.raise_for_status()
+            data = response.json()
+            if not data.get('valid'):
+                raise forms.ValidationError("Invalid code. Please get the code from the front of the room to enter.")
+        except (requests.RequestException, ValueError):
+            # Fail closed on server error
+            raise forms.ValidationError("Could not verify code with server. Please try again later.")
+
+        return otp
 
 
 @login_required
