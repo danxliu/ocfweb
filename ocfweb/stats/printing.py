@@ -12,15 +12,15 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from matplotlib.figure import Figure
 from ocflib.lab import stats
-from ocflib.printing.printers import PRINTERS
 from ocflib.printing.quota import get_connection
 from ocflib.printing.quota import SEMESTERLY_QUOTA
 
 from ocfweb.caching import periodic
 from ocfweb.component.graph import plot_to_image_bytes
+from ocfweb.printing import get_printers
 
-ALL_PRINTERS = ('papercut', 'pagefault', 'logjam', 'logjam-old', 'deforestation')
-ACTIVE_PRINTERS = ('papercut', 'pagefault', 'logjam')
+ALL_PRINTERS = ('papercut', 'pagefault', 'logjam', 'logjam-old', 'deforestation', 'OCF-BW', 'OCF-Color')
+ACTIVE_PRINTERS = ('OCF-BW', 'OCF-Color')
 
 
 def stats_printing(request: HttpRequest) -> HttpResponse:
@@ -29,7 +29,7 @@ def stats_printing(request: HttpRequest) -> HttpResponse:
         'stats/printing.html',
         {
             'title': 'Printing Statistics',
-            'current_printers': PRINTERS,
+            'current_printers': get_printers().keys(),
             'toner_changes': _toner_changes(),
             'last_month': [
                 date.today() - timedelta(days=i)
@@ -75,7 +75,7 @@ def _toner_changes() -> List[Any]:
             printer,
             _toner_used_by_printer(printer),
         )
-        for printer in ACTIVE_PRINTERS
+        for printer in get_printers().keys()
     ]
 
 
@@ -197,13 +197,14 @@ def _pages_printed_for_printer(printer: str, resolution: int = 100) -> List[Any]
 
 @periodic(3600)
 def _pages_printed_data() -> List[Any]:
+    printers = set(ALL_PRINTERS) | set(get_printers().keys())
     return [
         {
             'name': printer,
             'animation': False,
             'data': _pages_printed_for_printer(printer),
         }
-        for printer in ALL_PRINTERS
+        for printer in sorted(printers)
     ]
 
 

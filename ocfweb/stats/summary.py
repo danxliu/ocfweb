@@ -20,9 +20,9 @@ from ocflib.lab.stats import users_in_lab_count as real_users_in_lab_count
 from ocflib.lab.stats import UtilizationProfile
 from ocflib.printing.printers import get_maintkit
 from ocflib.printing.printers import get_toner
-from ocflib.printing.printers import PRINTERS
 
 from ocfweb.caching import periodic
+from ocfweb.printing import get_printers
 from ocfweb.stats.daily_graph import get_open_close
 
 _logger = logging.getLogger(__name__)
@@ -86,9 +86,10 @@ def printers() -> List[Any]:
                 return None
         return inner
 
+    printer_names = get_printers().keys()
     return sorted(
         (printer, silence(get_toner)(printer), silence(get_maintkit)(printer))
-        for printer in PRINTERS
+        for printer in printer_names
     )
 
 
